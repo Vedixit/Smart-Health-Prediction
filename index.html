@@ -1,0 +1,353 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Smart Health Prediction System</title>
+  <link rel="stylesheet" href="style.css">
+</head>
+<body>
+  <header>
+    <h1>Smart Health Prediction System</h1>
+    <nav>
+      <ul class="nav-menu">
+        <li><a href="#home">Home</a></li>
+        <li><a href="#login">Login</a></li>
+        <li><a href="#register">Register</a></li>
+        <li><a href="#predict">Predict</a></li>
+        <li><a href="#history">History</a></li>
+        <li><a href="#admin">Admin</a></li>
+      </ul>
+    </nav>
+  </header>
+
+  <section id="fever-image">
+
+    <h1>Symptom Example: Fever</h1>
+    <img
+  src="/assets/Fever.jpeg"
+  alt="Fever symptom"
+  class="diagram-img"
+/>
+
+<body>
+    <div class="container">
+        <h1>Smart Health Prediction System</h1>
+        <form id="healthPredictionForm" action="#" method="POST">
+            <div class="form-group">
+                <label for="age">Age (years):</label>
+                <input type="number" id="age" name="age" min="0" max="120" required />
+            </div>
+            <div class="form-group">
+                <label for="gender">Gender:</label>
+                <select id="gender" name="gender" required>
+                    <option value="" disabled selected>Select your gender</option>
+                    <option value="male">Male</option>
+                    <option value="female">Female</option>
+                    <option value="other">Other</option>
+                </select>
+            </div>
+            <div class="form-group">
+                <label for="height">Height (cm):</label>
+                <input type="number" id="height" name="height" min="30" max="250" step="0.1" required />
+            </div>
+            <div class="form-group">
+                <label for="weight">Weight (kg):</label>
+                <input type="number" id="weight" name="weight" min="2" max="300" step="0.1" required />
+            </div>
+            <div class="form-group">
+                <label for="symptoms">Symptoms (comma separated):</label>
+                <textarea id="symptoms" name="symptoms" rows="3" placeholder="e.g. fever, cough, headache" required></textarea>
+            </div>
+            <button type="submit">Predict Health</button>
+        </form>
+    </div>
+</body>
+</html>
+
+<title>Smart Health Prediction System</title>
+  <style>
+    body {
+      font-family: Arial, sans-serif;
+      max-width: 900px;
+      margin: 20px auto;
+      padding: 0 15px;
+      background-color: #f9f9f9;
+    }
+    h1 {
+      text-align: center;
+      color: #2c3e50;
+    }
+    form {
+      margin-bottom: 20px;
+      padding: 15px;
+      background: white;
+      border-radius: 8px;
+      box-shadow: 0 0 5px #ccc;
+    }
+    label {
+      font-weight: bold;
+    }
+    input[type="text"] {
+      width: 100%;
+      padding: 8px;
+      margin-top: 5px;
+      margin-bottom: 15px;
+      border-radius: 4px;
+      border: 1px solid #ccc;
+      font-size: 16px;
+      box-sizing: border-box;
+    }
+    button {
+      background-color: #2980b9;
+      color: white;
+      border: none;
+      padding: 10px 20px;
+      font-size: 16px;
+      border-radius: 5px;
+      cursor: pointer;
+    }
+    button:hover {
+      background-color: #3498db;
+    }
+    #allDiseasesBtn {
+      margin-bottom: 20px;
+      background-color: #27ae60;
+    }
+    #allDiseasesBtn:hover {
+      background-color: #2ecc71;
+    }
+    #results {
+      background: white;
+      padding: 15px;
+      border-radius: 8px;
+      box-shadow: 0 0 5px #ccc;
+    }
+    .disease {
+      border-bottom: 1px solid #ddd;
+      padding: 10px 0;
+    }
+    .disease:last-child {
+      border-bottom: none;
+    }
+    .disease h3 {
+      margin: 0;
+      color: #34495e;
+    }
+    .disease p {
+      margin: 5px 0;
+      color: #555;
+    }
+    .error {
+      color: red;
+      font-weight: bold;
+      margin-bottom: 10px;
+    }
+  </style>
+</head>
+<body>
+  <h1>Smart Health Prediction System</h1>
+  <form id="symptomForm">
+    <label for="symptomsInput">Enter symptoms (comma separated):</label>
+    <input type="text" id="symptomsInput" placeholder="e.g. fever, cough" required />
+    <button type="submit">Search Disease</button>
+  </form>
+  <button id="allDiseasesBtn">Show All Diseases & Remedies</button>
+  <div id="error" class="error"></div>
+  <div id="results"></div>
+
+  <script>
+    const form = document.getElementById('symptomForm');
+    const symptomsInput = document.getElementById('symptomsInput');
+    const resultsDiv = document.getElementById('results');
+    const errorDiv = document.getElementById('error');
+    const allDiseasesBtn = document.getElementById('allDiseasesBtn');
+
+    function clearDisplay() {
+      resultsDiv.innerHTML = '';
+      errorDiv.textContent = '';
+      console.clear();
+    }
+
+    function displayDiseases(diseases) {
+      if (!diseases || diseases.length === 0) {
+        resultsDiv.innerHTML = '<p>No diseases matched the provided symptoms.</p>';
+        return;
+      }
+
+      const html = diseases.map(disease => {
+        return `
+          <div class="disease">
+            <h3>${disease.name}</h3>
+            <p><strong>Symptoms:</strong> ${disease.symptoms.join(', ')}</p>
+            <p><strong>Prevention:</strong> ${disease.prevention}</p>
+            <p><strong>Remedies:</strong> ${disease.remedies}</p>
+          </div>
+        `;
+      }).join('');
+      resultsDiv.innerHTML = html;
+    }
+
+    form.addEventListener('submit', async (e) => {
+      e.preventDefault();
+      clearDisplay();
+
+      const symptoms = symptomsInput.value.trim();
+      if (!symptoms) {
+        errorDiv.textContent = 'Please enter at least one symptom.';
+        return;
+      }
+
+      console.log("Submitting symptoms:", symptoms); // Debug log
+
+      try {
+        const response = await fetch('/predict', {
+          method: 'POST',
+          headers: {
+            'Content-Type': 'application/json'
+          },
+          body: JSON.stringify({ symptoms })
+        });
+
+        const data = await response.json();
+        console.log("Response data:", data); // Debug log
+
+        if (!response.ok) {
+          errorDiv.textContent = data.error || 'An error occurred.';
+          return;
+        }
+
+        if (data.message) {
+          resultsDiv.innerHTML = `<p>${data.message}</p>`;
+        } else {
+          displayDiseases(data);
+        }
+      } catch (error) {
+        errorDiv.textContent = 'Failed to fetch results. Please try again later.';
+        console.error('Fetch error:', error);
+      }
+    });
+
+    allDiseasesBtn.addEventListener('click', async () => {
+      clearDisplay();
+      console.log("Fetching all diseases");
+      try {
+        const response = await fetch('/diseases');
+        const data = await response.json();
+        console.log("All diseases data:", data);
+        displayDiseases(data);
+      } catch (error) {
+        errorDiv.textContent = 'Failed to fetch diseases. Please try again later.';
+        console.error('Fetch error:', error);
+      }
+    });
+  </script>
+
+
+  <section id="home">
+    <h2>Welcome to Smart Health Prediction System</h2>
+    <p>
+      The Smart Health Prediction System is an AI-powered web application designed to assist users in identifying potential diseases based on the symptoms they experience. 
+      By leveraging the power of machine learning, the system provides quick, accessible, and reliable predictions, helping users take early action for their health and well-being.
+    </p>
+    <p>
+      This platform is especially helpful for people who may not have immediate access to healthcare professionals. Users can simply register or log in, input their symptoms in a user-friendly form, and receive a prediction generated by a trained machine learning model.
+    </p>
+    <p>
+      The system also stores user history securely, enabling them to monitor past predictions. Additionally, administrators can monitor platform usage and manage user data through a dedicated Admin Panel.
+    </p>
+    <p>
+      Whether you're a student building an innovative health tech solution or someone looking for a quick health check, this system is built to be efficient, responsive, and easy to use.
+    </p>
+  </section>
+  
+
+  <section id="login">
+    <h2>Login</h2>
+    <form>
+      <input type="email" placeholder="Email" required>
+      <input type="password" placeholder="Password" required>
+      <button type="submit">Login</button>
+    </form>
+  </section>
+
+  <section id="register">
+    <h2>Register</h2>
+    <form>
+      <input type="text" placeholder="Name" required>
+      <input type="email" placeholder="Email" required>
+      <input type="password" placeholder="Password" required>
+      <button type="submit">Register</button>
+    </form>
+  </section>
+
+  <section id="predict">
+    <h2>Symptom Input Form</h2>
+    <form id="symptom-form"></form>>
+      <input type="text"  id="symptoms"
+      name="symptoms" placeholder="Enter symptoms (e.g. fever, cough)" required>
+      
+      <button type="submit">Predict</button>
+    </form>
+    <div class="result" id="result" style="display: none;">
+      <h3>Prediction Result:</h3>
+      <p><strong>Disease:</strong> <span id="prediction-output"></span></p>
+    <p><strong>Treatment:</strong> <span id="treatment-output"></span></p>
+    <p><strong>Prevention:</strong> <span id="prevention-output"></span></p>
+  </div>
+</section>
+      <p id="prediction-output">Hypertension (example)</p>
+      <p>
+        The predicted disease result is displayed immediately after the form submission. It may also include suggestions or health alerts depending on the condition predicted.
+      </p>
+      <p>
+        This section is designed for clarity, with emphasis on readability, so users can take the necessary steps like consulting a doctor or making health-related decisions based on the result.
+      </p>
+    </div>
+  </section>
+
+  <section id="history">
+    <h2>Prediction History</h2>
+    <ul>
+      <li>02/04/2025 - Fever, Headache → Dengue</li>
+      <li>14/03/2025 - Chest Pain → Heart Disease</li>
+    </ul>
+  </section>
+
+  <section id="admin">
+    <h2>Admin Panel</h2>
+    <p>
+        The admin panel gives authorized administrators access to all system records. It includes a dashboard to monitor registered users, their prediction activity, and system usage statistics.
+      </p>
+      <p>
+        Each row in the admin table includes the user's name, email, symptoms entered, predicted disease, and date of prediction. This helps in auditing system usage, understanding common symptoms, and managing backend records effectively.
+      </p>
+      <p>
+        The admin interface ensures data transparency and allows for future enhancements like analytics and user trend analysis.
+      </p>
+    <table>
+      <thead>
+        <tr>
+          <th>User</th>
+          <th>Email</th>
+          <th>Symptoms</th>
+          <th>Prediction</th>
+          <th>Date</th>
+        </tr>
+      </thead>
+      <tbody>
+        <tr>
+          <td>Ved Dixit</td>
+          <td>ved@example.com</td>
+          <td>Fever, Cough</td>
+          <td>Flu</td>
+          <td>23/04/2025</td>
+        </tr>
+      </tbody>
+    </table>
+  </section>
+
+  <footer>
+    <p>Made with ❤️ by Ved Dixit - 2025</p>
+  </footer>
+</body>

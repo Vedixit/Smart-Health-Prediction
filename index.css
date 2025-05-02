@@ -1,0 +1,89 @@
+body {
+  font-family: Arial, sans-serif;
+  margin: 0;
+  padding: 0;
+  background-color: #f7f7f7;
+}
+
+h1, h2 {
+  color: #333;
+}
+
+button {
+  background-color: #4CAF50;
+  border: none;
+  color: white;
+  padding: 10px 20px;
+  text-align: center;
+  font-size: 16px;
+  cursor: pointer;
+}
+
+button:hover {
+  background-color: #45a049;
+}
+
+input[type="text"] {
+  padding: 10px;
+  width: 100%;
+  max-width: 400px;
+  margin: 10px 0;
+  font-size: 16px;
+}
+
+.form-container, .home-container, .result-container {
+  text-align: center;
+  padding: 20px;
+}
+
+.cta-button {
+  font-size: 18px;
+  padding: 15px 30px;
+  background-color: #008CBA;
+  color: white;
+  border: none;
+  cursor: pointer;
+}
+header {
+  background-color: #0a4275;
+  color: white;
+  padding: 20px;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+}
+
+header h1 {
+  margin: 0;
+  font-size: 24px;
+}
+
+.nav-menu {
+  list-style: none;
+  display: flex;
+  gap: 25px;
+  margin: 0;
+  padding: 0;
+}
+
+.nav-menu li a {
+  color: white;
+  text-decoration: none;
+  font-weight: bold;
+  transition: color 0.3s ease;
+}
+
+.nav-menu li a:hover {
+  color: #ffd700; /* Gold on hover */
+  text-decoration: underline;
+}
+.diagram-img {
+  width: 15cm;
+  height: 7cm;
+  object-fit: cover;
+  display: block;
+  margin: 20px auto;
+  border-radius: 10px;
+  box-shadow: 0 4px 10px rgba(0,0,0,0.2);
+}
+  
